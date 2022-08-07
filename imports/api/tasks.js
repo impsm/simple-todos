@@ -19,6 +19,11 @@ if (Meteor.isServer) {
 }
 
 Meteor.methods({
+    /**
+     * Insert a task for the logged user.
+     * @param {{ text: String }}
+     * @throws Will throw an error if user is not logged in.
+     */
     'tasks.insert'(text) {
         check(text, String);
 
@@ -34,6 +39,12 @@ Meteor.methods({
             username: Meteor.users.findOne(this.userId).username,
         });
     },
+
+    /**
+     * Remove a task.
+     * @param {{ taskId: String }}
+     * @throws Will throw an error if user is not logged in or is not the task owner.
+     */
     'tasks.remove'(taskId) {
         check(taskId, String);
 
@@ -45,6 +56,12 @@ Meteor.methods({
 
         Tasks.remove(taskId);
     },
+
+    /**
+     * Toggle task as done or not.
+     * @param {{ taskId: String, setChecked: Boolean }}
+     * @throws Will throw an error if user is not logged in or is not the task owner.
+     */
     'tasks.setChecked'(taskId, setChecked) {
         check(taskId, String);
         check(setChecked, Boolean);
@@ -57,6 +74,12 @@ Meteor.methods({
 
         Tasks.update(taskId, { $set: { checked: setChecked } });
     },
+
+    /**
+     * Toggle task as private or public.
+     * @param {{ taskId: String, setToPrivate: Boolean }}
+     * @throws Will throw an error if user is not logged in or is not the task owner.
+     */
     'tasks.setPrivate'(taskId, setToPrivate) {
         check(taskId, String);
         check(setToPrivate, Boolean);
